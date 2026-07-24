@@ -200,3 +200,11 @@ class Particle {
 
 https://editor.p5js.org/builesjuanjo10/sketches/J-4dNAtdp
 
+| Criterio | Cumplo | No cumplo | Evidencia |
+| :--- | :---: | :---: | :--- |
+| **Encargo completo:** interpreto los cinco momentos dentro de un mismo sistema visual. | [x] | [ ] | El sketch simula un único ecosistema (enjambre de luciérnagas) donde se integran los 5 momentos en una sola escena: Normalidad (hábitat superior), Posibilidad (aleteo), Tendencia (brisa), Influencia (presencia humana) y Excepción (huida brusca). |
+| **Simulación con intención:** utilizo al menos tres conceptos de la unidad para comunicar las ideas del encargo. | [x] | [ ] | Se implementan 4 conceptos para dar vida biológica al sistema: Distribución de Gauss (`randomGaussian`) para agruparlas, Caminata aleatoria para el aleteo, Ruido Perlin para simular el viento, y *Lévy flight* para simular el escape por supervivencia. |
+| **Interacción significativa:** la interacción modifica el comportamiento o las probabilidades del sistema, que también funciona sin intervención. | [x] | [ ] | Sin interacción, el sistema fluye orgánicamente. Al presionar el mouse, no se dibuja directamente, sino que se altera la matemática del mundo: se invierte el vector Y del Perlin noise y se aumenta drásticamente la probabilidad (`probJump`) de ejecutar un *Lévy flight*. |
+| **Prototipo funcional:** la experiencia puede ejecutarse y recorrerse completa sin errores que impidan comprenderla. | [x] | [ ] | El código escrito en p5.js corre de principio a fin sin errores en consola, se adapta dinámicamente al formato 9:16 exigido y la simulación interactiva responde en tiempo real. |
+| **Proceso documentado:** la bitácora evidencia avances, decisiones, dificultades, soluciones, uso de IA y enlace al prototipo. | [ ] | [x] | Aún me falta terminar de subir los commits correspondientes a los experimentos previos en GitHub, detallar las dificultades encontradas con las iteraciones de código y enlazar el prototipo final. |
+
