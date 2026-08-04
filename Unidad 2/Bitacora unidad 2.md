@@ -1,210 +1,247 @@
 # Unidad 01
 
-## Actividad 03
+## Actividad 05 (Reto de diseño)
 
-### En tus propias palabras, ¿cuál es la diferencia entre una distribución uniforme y una no uniforme de números aleatorios?
-En una distribucion uniforme, todos los resultados posibles tienen exactamente la misma probabilidad de ocurrir. En una distribucion no uniforme, ciertos resultados tienen mayor probabilidad de salir que otros.
+### Concepto
+#### Tension
+Quiero explorar la tensión entre la Estabilidad Organica (Homeostasis) y el Consumo Parasitario (Entropia).
 
-## Actividad 04
-``` js
-function setup() {
-  createCanvas(640, 240);
-  background(255);
-}
+#### Manifestación en el comportamiento
+Es una simulacion de ecosistema celular donde una estructura de tejidos estables es infiltrada por parasitos. El sistema intentará defenderse mediante el uso de anticuerpos, pero si el parásito consume demasiado, el entorno colapsa en un tejido muerto que altera el movimiento de todos los demás.
 
-function draw() {
-  // Distribucion en X (media en el centro, desviacion de 40)
-  let x = randomGaussian(width / 2, 40);
-  
-  // Distribucion en Y (media en el centro, desviacion de 40)
-  let y = randomGaussian(height / 2, 40);
-  
-  // Distribucion para el tamaño del círculo (media 15, desviación 5)
-  let r = randomGaussian(15, 5);
+### Ecosistema de Partículas (4 Tipos)
+**Células Base (Azules):** Forman el "tejido". Tienen alta atracción mutua a media distancia para agruparse, pero se repelen a muy corta distancia para mantener volumen orgánico.
 
-  noStroke();
-  
-  fill(0, 150, 200, 30);
-  
-  circle(x, y, r);
-}
-```
+**Parásitos (Magenta):** Entidades hiperactivas y veloces. Se atraen fuertemente a las Células Base para absorberlas, pero se repelen entre sí para dispersar la infección.
 
-## Actividad 05
+**Anticuerpos (Cian):** Los protectores del sistema. Orbitan cerca de las Células Base (atracción leve) y son atraídos agresivamente por los Parásitos para neutralizarlos.
 
-``` js
-let walker;
+**Tejido Necrótico / Basura (Gris):** Células Base corrompidas. Pierden toda velocidad (fricción altísima) y repelen fuertemente a las Células vivas y a los Anticuerpos, dañando la geometría del sistema.
 
-function setup() {
-  createCanvas(640, 240);
-  walker = new Walker();
-  background(255);
-}
+### Justificacion
+- Seleccione una relación asimétrica entre Parásito y Célula porque quiero hacer perceptible la "depredacion". Espero que produzca órbitas de persecución destructiva.
 
-function draw() {
-  walker.step();
-  walker.show();
-}
+- Seleccione la población de Tejido Necrótico con fricción máxima porque quiero hacer perceptible la degradación del entorno. Espero que produzca barreras físicas inservibles que aíslen a los sobrevivientes.
 
-class Walker {
-  constructor() {
-    this.x = width / 2;
-    this.y = height / 2;
-  }
-
-  show() {
-    stroke(0, 150);
-    strokeWeight(2);
-    point(this.x, this.y);
-  }
-
-  step() {
-    let stepX;
-    let stepY;
-    let r = random(1);
-    
-    // 1% de probabilidad de dar un salto grande (Levy flight)
-    if (r < 0.01) {
-      stepX = random(-50, 50);
-      stepY = random(-50, 50);
-    } else {
-      stepX = random(-2, 2);
-      stepY = random(-2, 2);
-    }
-
-    this.x += stepX;
-    this.y += stepY;
-    
-    this.x = constrain(this.x, 0, width);
-    this.y = constrain(this.y, 0, height);
-  }
-}
-```
-### Explica por qué usaste esta técnica y qué resultados esperabas obtener.
-Me pareció la forma mas clara y funcional de aplicar el concepto del Levy flight sin complicar demasiado la lógica del caminante.
-Quería evitar que el caminante se quedara dando vueltas en el mismo sitio. Esperaba ver que el caminante abarcara mas zonas del lienzo.
-
-## Actividad 06
-``` js
-let t = 0;
-
-function setup() {
-  createCanvas(640, 240);
-}
-
-function draw() {
-  background(20);
-  
-  stroke(50, 255, 100); 
-  strokeWeight(2);
-  noFill();
-
-  beginShape();
-  let xoff = t;
-  
-  // Dibujamos la línea de izquierda a derecha
-  for (let x = 0; x < width; x += 5) {
-    // Mapeamos el ruido Perlin a la altura de la pantalla (eje Y)
-    let y = map(noise(xoff), 0, 1, 50, height - 20);
-    vertex(x, y);
-    
-    // Avanzamos en el espacio del ruido para el siguiente vértice
-    xoff += 0.02; 
-  }
-  endShape();
-
-  // Avanzamos en el tiempo general para que el terreno se desplace
-  t += 0.01; 
-}
-```
-### Explica por qué lo visualizaste de esa manera y qué resultados esperabas obtener.
-En vez de mover un solo objeto, usé el ruido Perlin para generar un terreno 2D infinito. Use los valores de noise() para las posiciones Y de una línea de vertices, y usé una variable de tiempo global para que el terreno se desplace de forma automática hacia un lado.
-Queria ver bien la diferencia con la aleatoriedad normal. Si usaba random(), la linea iba a ser puros picos locos y caoticos. Con el noise(), esperaba lograr lo que dice el documento: curvas suaves y conectadas que parecen colinas mas naturales y organicas.
-
-## Actividad 07
-``` js
+  ### Codigo
+```js
 let particles = [];
+let numCelulas = 90;
+let numParasitos = 40;   // Aumentado para generar una invasión real
+let numAnticuerpos = 20; // Reducido para que la defensa esté en desventaja
 
 function setup() {
-  let w = windowHeight * (9/16);
-  createCanvas(w, windowHeight);
-  background(15);
+  createCanvas(windowHeight, windowHeight);
+  colorMode(HSB, 360, 100, 100, 100);
   
-  for (let i = 0; i < 150; i++) {
-    particles.push(new Particle());// Ciclo que crea particulas y las agrega al arreglo
+  // Inicializar poblaciones
+  for (let i = 0; i < numCelulas; i++) {
+    particles.push(new Particle(random(width), random(height), "celula"));
+  }
+  for (let i = 0; i < numParasitos; i++) {
+    particles.push(new Particle(random(width), random(height), "parasito"));
+  }
+  for (let i = 0; i < numAnticuerpos; i++) {
+    particles.push(new Particle(random(width), random(height), "anticuerpo"));
   }
 }
 
 function draw() {
-  background(15, 40); // Rastro visual tipo pantalla retro
+  blendMode(BLEND);
+  background(240, 80, 5, 20); // Fondo oscuro con rastro suave
   
+  // Capa 1: Dibujar conexiones moleculares solo entre Células Base vivas
+  blendMode(SCREEN);
+  for (let i = 0; i < particles.length; i++) {
+    if (particles[i].tipo === "celula") {
+      particles[i].dibujarEnlaces(particles);
+    }
+  }
+  
+  // Capa 2: Calcular interacciones cruzadas (Matriz Particle Life) y actualizar
   for (let p of particles) {
-    p.update(); // Calcular la posicion nueva de cada una de las particulas del arreglo
-    p.show(); // Dibujar en la pantalla
+    p.aplicarMatrizFuerzas(particles);
+    p.update();
+    p.checkEdges();
+    p.show();
   }
 }
 
 class Particle {
-  constructor() { // Donde nacen las particulas
-    // 1. Normalidad: Aparecen concentradas en la parte superior
-    this.x = randomGaussian(width / 2, width / 8);
-    this.y = randomGaussian(height / 6, height / 10);
-    this.tx = random(1000);
-    this.ty = random(10000);
+  constructor(x, y, tipo) {
+    this.position = createVector(x, y);
+    this.velocity = p5.Vector.random2D().mult(random(0.5, 1.5));
+    this.acceleration = createVector(0, 0);
+    this.tipo = tipo;
+    this.configurarPropiedades();
+  }
+
+  configurarPropiedades() {
+    // Configuración física y visual según su rol en la contradicción
+    if (this.tipo === "celula") {
+      this.topSpeed = 2.0;
+      this.maxForce = 0.15;
+      this.hue = 200; // Azul orgánico
+      this.radius = 6;
+    } else if (this.tipo === "parasito") {
+      this.topSpeed = 4.5; // Muy rápidos
+      this.maxForce = 0.35;
+      this.hue = 330; // Magenta parasitario
+      this.radius = 8;
+    } else if (this.tipo === "anticuerpo") {
+      this.topSpeed = 3.5;
+      this.maxForce = 0.25;
+      this.hue = 160; // Cian inmunológico
+      this.radius = 5;
+    } else if (this.tipo === "necrotico") {
+      this.topSpeed = 0.2; // Casi inmóviles, representan muerte/entropía
+      this.maxForce = 0.05;
+      this.hue = 0; // Gris/Sin matiz saturado
+      this.radius = 7;
+    }
   }
 
   update() {
-    // 2. Posibilidad:Caminata aleatoria
-    let stepX = random(-1, 1);
-    let stepY = random(-1, 1); // Paso al azar entre -1 y 1 para ambos ejes
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(this.topSpeed);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0); // Limpiar fuerzas
+  }
 
+  applyForce(force) {
+    this.acceleration.add(force);
+  }
+
+  aplicarMatrizFuerzas(poblacion) {
+    let fuerzaTotal = createVector(0, 0);
     
-    let probJump = 0.005; // 0.5% de probabilidad de hacer un salto
-    let moveY = map(noise(this.ty), 0, 1, 0, 2); // Se hace el movimiento hacia abajo usando perlin noise
-
-    // 3. Influencia: El usuario invierte el comportamiento del sistema
-    if (mouseIsPressed) {
-      probJump = 0.04; // Mas probabilidad de salto
-      moveY = map(noise(this.ty), 0, 1, -2, 0); // Invierten el movimiento, se muevebn hacia arriba
+    for (let otra of poblacion) {
+      if (otra === this) continue;
+      
+      let d = p5.Vector.dist(this.position, otra.position);
+      let radioInteraccion = 100;
+      let nucleoExclusion = 20; // Evita que se superpongan de forma irreal
+      
+      if (d < radioInteraccion) {
+        let dir = p5.Vector.sub(otra.position, this.position);
+        dir.normalize();
+        
+        // 1. Núcleo duro de exclusión (Física básica para todos)
+        if (d < nucleoExclusion) {
+          let fuerzaRepulsion = map(d, 0, nucleoExclusion, -this.topSpeed * 2, 0);
+          fuerzaTotal.add(dir.copy().mult(fuerzaRepulsion));
+          
+          // DETECCION DE COLISIÓN CONCEPTUAL (Infección y Defensa)
+          this.evaluarColisiones(otra);
+          continue; 
+        }
+        
+        // 2. Fuerzas de la Matriz Compleja (Zonas externas)
+        let factorFuerza = 0;
+        
+        if (this.tipo === "celula") {
+          if (otra.tipo === "celula") factorFuerza = 0.8;    // Atracción mutua (Cohesión)
+          if (otra.tipo === "parasito") factorFuerza = -1.5; // Huida extrema (Pánico)
+          if (otra.tipo === "necrotico") factorFuerza = -0.5;// Evitan el tejido muerto
+        } 
+        else if (this.tipo === "parasito") {
+          if (otra.tipo === "celula") factorFuerza = 2.0;    // Atracción predatoria alta
+          if (otra.tipo === "parasito") factorFuerza = -0.6; // Repulsión mutua (Dispersión)
+          if (otra.tipo === "anticuerpo") factorFuerza = -1.2;// Huyen de su cazador
+        } 
+        else if (this.tipo === "anticuerpo") {
+          if (otra.tipo === "parasito") factorFuerza = 2.5;  // Atracción agresiva al enemigo
+          if (otra.tipo === "celula") factorFuerza = 0.4;    // Orbitan el tejido vivo
+        }
+        else if (this.tipo === "necrotico") {
+          factorFuerza = -0.2; // Indiferentes, repelen sutilmente a todo lo vivo
+        }
+        
+        // Atenuación de la fuerza según la distancia
+        let intensidad = map(d, nucleoExclusion, radioInteraccion, factorFuerza, 0);
+        fuerzaTotal.add(dir.mult(intensidad));
+      }
     }
+    
+    fuerzaTotal.limit(this.maxForce);
+    this.applyForce(fuerzaTotal);
+  }
 
-    // 4. Tendencia: El ruido Perlin suaviza la caminata aleatoria
-    stepX += map(noise(this.tx), 0, 1, -1.5, 1.5);
-    stepY += moveY;
-
-    // 5. Excepción: Salto brusco (Lévy flight)
-    if (random(1) < probJump) { // Genera un numero entre 0 a 1, si cae dentro la probabilidad del paso la particual hace un salto brusco
-      stepX *= random(10, 25);
-      stepY *= random(10, 25);
+  evaluarColisiones(otra) {
+    // Si un parásito muerde una célula viva, la corrompe en tejido necrótico
+    if (this.tipo === "parasito" && otra.tipo === "celula") {
+      if (random(1) < 0.01) { 
+        otra.tipo = "necrotico";
+        otra.configurarPropiedades();
+      }
     }
-
-    this.x += stepX;
-    this.y += stepY;
-    this.tx += 0.01;
-    this.ty += 0.01;
-
-    // Si salen de la pantalla, vuelven a su estado de "Normalidad"
-    if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-      this.x = randomGaussian(width / 2, width / 8);
-      this.y = randomGaussian(height / 6, height / 10);
+    // Si un anticuerpo toca a un parásito, tiene probabilidad de destruirlo
+    if (this.tipo === "anticuerpo" && otra.tipo === "parasito") {
+      // Balanceo: Reducido de 0.02 a 0.01 para que los parásitos vivan más tiempo
+      if (random(1) < 0.01) {
+        otra.tipo = "celula"; // Vuelve a ser célula limpia
+        otra.configurarPropiedades();
+      }
     }
+  }
+
+  dibujarEnlaces(poblacion) {
+    let rangoEnlace = 50;
+    for (let otra of poblacion) {
+      if (otra.tipo === "celula" && otra !== this) {
+        let d = p5.Vector.dist(this.position, otra.position);
+        if (d < rangoEnlace) {
+          let alpha = map(d, 0, rangoEnlace, 60, 0);
+          stroke(this.hue, 80, 100, alpha);
+          line(this.position.x, this.position.y, otra.position.x, otra.position.y);
+        }
+      }
+    }
+  }
+
+  checkEdges() {
+    if (this.position.x < 0) this.position.x = width;
+    if (this.position.x > width) this.position.x = 0;
+    if (this.position.y < 0) this.position.y = height;
+    if (this.position.y > height) this.position.y = 0;
   }
 
   show() {
     noStroke();
-    fill(50, 255, 100, 200); // Verde neón
-    rect(this.x, this.y, 4, 4); // Cuadrados tipo 8-bits
+    let flick = noise(frameCount * 0.05 + this.position.x);
+    
+    if (this.tipo === "celula") {
+      fill(this.hue, 80, 90, 70);
+      circle(this.position.x, this.position.y, this.radius);
+    } 
+    else if (this.tipo === "parasito") {
+      // Apariencia amenazante
+      push();
+      translate(this.position.x, this.position.y);
+      rotate(this.velocity.heading());
+      fill(this.hue, 95, 100, 80 + flick * 20);
+      triangle(this.radius * 1.5, 0, -this.radius * 0.8, -this.radius * 0.6, -this.radius * 0.8, this.radius * 0.6);
+      pop();
+    } 
+    else if (this.tipo === "anticuerpo") {
+      fill(this.hue, 90, 100, 90);
+      push();
+      translate(this.position.x, this.position.y);
+      rotate(QUARTER_PI);
+      rect(-this.radius/2, -this.radius/2, this.radius, this.radius);
+      pop();
+    }
+    else if (this.tipo === "necrotico") {
+      fill(0, 0, 30, 50);
+      rect(this.position.x - this.radius/2, this.position.y - this.radius/2, this.radius, this.radius);
+    }
   }
 }
+
+
 ```
 
-https://editor.p5js.org/builesjuanjo10/sketches/J-4dNAtdp
+https://editor.p5js.org/builesjuanjo10/sketches/oNSpaMFAf
 
-| Criterio | Cumplo | No cumplo | Evidencia |
-| :--- | :---: | :---: | :--- |
-| **Encargo completo:** interpreto los cinco momentos dentro de un mismo sistema visual. | [x] | [ ] | El sketch simula un único ecosistema (enjambre de luciérnagas) donde se integran los 5 momentos en una sola escena: Normalidad (hábitat superior), Posibilidad (aleteo), Tendencia (brisa), Influencia (presencia humana) y Excepción (huida brusca). |
-| **Simulación con intención:** utilizo al menos tres conceptos de la unidad para comunicar las ideas del encargo. | [x] | [ ] | Se implementan 4 conceptos para dar vida biológica al sistema: Distribución de Gauss (`randomGaussian`) para agruparlas, Caminata aleatoria para el aleteo, Ruido Perlin para simular el viento, y *Lévy flight* para simular el escape por supervivencia. |
-| **Interacción significativa:** la interacción modifica el comportamiento o las probabilidades del sistema, que también funciona sin intervención. | [x] | [ ] | Sin interacción, el sistema fluye orgánicamente. Al presionar el mouse, no se dibuja directamente, sino que se altera la matemática del mundo: se invierte el vector Y del Perlin noise y se aumenta drásticamente la probabilidad (`probJump`) de ejecutar un *Lévy flight*. |
-| **Prototipo funcional:** la experiencia puede ejecutarse y recorrerse completa sin errores que impidan comprenderla. | [x] | [ ] | El código escrito en p5.js corre de principio a fin sin errores en consola, se adapta dinámicamente al formato 9:16 exigido y la simulación interactiva responde en tiempo real. |
-| **Proceso documentado:** la bitácora evidencia avances, decisiones, dificultades, soluciones, uso de IA y enlace al prototipo. | [ ] | [x] | Aún me falta terminar de subir los commits correspondientes a los experimentos previos en GitHub, detallar las dificultades encontradas con las iteraciones de código y enlazar el prototipo final. |
+
 
