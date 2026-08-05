@@ -243,5 +243,19 @@ class Particle {
 
 https://editor.p5js.org/builesjuanjo10/sketches/oNSpaMFAf
 
+### Autoevaluación - Unidad 2: Reto de diseño
+
+| Criterio | Peso | Valoración | Aporte |
+| :--- | :---: | :---: | :---: |
+| **La intención es clara y perceptible en el comportamiento.** | 20% | 100% | 20% |
+| **Los tipos, cantidades, matriz y parámetros están justificados desde la intención.** | 25% | 100% | 25% |
+| **Comprendo y puedo modificar el funcionamiento técnico del sistema.** | 20% | 100% | 20% |
+| **El sistema produce variaciones con una identidad reconocible.** | 15% | 100% | 15% |
+| **Experimenté, comparé, seleccioné y descarté con criterios claros.** | 10% | 100% | 10% |
+| **Puedo distinguir y sustentar lo diseñado y lo emergente.** | 10% | 100% | 10% |
+| **PUNTAJE TOTAL** | **100%** | | **100%** |
+
+
+
 
 
