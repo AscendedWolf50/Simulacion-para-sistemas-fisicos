@@ -240,6 +240,8 @@ class Particle {
 
 
 ```
+<img width="311" height="305" alt="image" src="https://github.com/user-attachments/assets/ca9ffbae-ef26-417b-9984-a132837edf29" />
+
 
 https://editor.p5js.org/builesjuanjo10/sketches/oNSpaMFAf
 
