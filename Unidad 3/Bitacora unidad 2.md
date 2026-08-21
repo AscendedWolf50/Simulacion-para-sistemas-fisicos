@@ -3,8 +3,8 @@
 
 ### 1. Instrumento funcional y publicado
 
-* **URL Pública:** `https://ascendedwolf50.github.io/Simulacion_RetoUnidad3/`
-* **Repositorio:** `https://github.com/AscendedWolf50/Simulacion_RetoUnidad3.git`
+* **URL Pública:** [(https://ascendedwolf50.github.io/Simulacion_RetoUnidad3/)]
+* **Repositorio:** [(https://github.com/AscendedWolf50/Simulacion_RetoUnidad3.git)]
 
 ### 2. Mapa del Sistema
 
