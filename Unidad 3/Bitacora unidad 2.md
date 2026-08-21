@@ -138,6 +138,16 @@ Aunque no son fuerzas vectoriales en la integración física, diseñé estos mod
 
 
 
+| Criterio | Peso | Valoración |
+| --- | --- | --- |
+| **Trazabilidad y comprensión del sistema** | 25 | **25** |
+| **Verificación del algoritmo de fuerzas** | 25 | **25** |
+| **Diseño de fuerzas e intención** | 20 | **20** |
+| **Instrumento, score e interpretación** | 15 |  |
+| **Experimentación y criterio frente a la IA** | 10 | **10** |
+| **Entrega técnica y documentación** | 5 | **5** |
+| **TOTAL** | **100** | **100** |
+
 
 
 
