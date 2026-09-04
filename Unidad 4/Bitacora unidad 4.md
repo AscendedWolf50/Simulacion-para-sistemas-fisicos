@@ -11,7 +11,7 @@ El proyecto toma el universo de ciencia ficción de *Dune* (Frank Herbert) no so
 ## El Modelo de Kuramoto en el Diseño
 El núcleo del proyecto es una extensión del **Modelo de Kuramoto**. Cada agente (entidad sonora) se calcula bajo la siguiente lógica:
 
-*   **Fase ($\theta_i$):** Representa el ciclo interno del agente. Cuando la fase completa un ciclo ($2\pi$), el agente emite su sonido característico (activando una envolvente ADSR) y produce un destello visual en la arena.
+*   **Fase ($\theta_i$):** Representa el ciclo interno del agente. Cuando la fase completa un ciclo ($2\pi$), el agente emite su sonido característico  y produce un destello visual en la arena.
 *   **Frecuencia Natural ($\omega_i$):** Es el *tempo* base al que el agente "quiere" oscilar si estuviera aislado. En la interfaz, esta variable se controla directamente mediante la posición vertical (Eje Y) del agente en el canvas.
 *   **Fuerza de Acoplamiento ($K$):** Representa la conductividad acústica o la tensión de la arena. Si $K$ es 0, cada agente suena a su propio ritmo (caos). Al aumentar $K$, los agentes se "escuchan" entre sí y obligan matemáticamente a sus fases a alinearse, creando ritmos unificados.
 *   **Topología Espacial Extendida ($d_{ij}$):** Se introdujo una modificación al modelo original integrando la distancia euclidiana entre agentes. El acoplamiento local es inversamente proporcional a la distancia: $K_{local} = \frac{K_{global}}{1 + d_{ij} \times 0.005}$. Esto permite crear sub-grupos rítmicos arrastrando los nodos por la pantalla.
